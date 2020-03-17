@@ -15,7 +15,7 @@
     "build": "cd frontend && react-scripts build",
     "test": "jest",
     "eject": "cd frontend && react-scripts eject",
-    "type-check": "./node_modules/typescript/bin/tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "husky": "^4.2.3"
