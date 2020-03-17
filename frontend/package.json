@@ -60,7 +60,7 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "type-check": "tsc --noEmit"
+    "type-check": "../node_modules/typescript/bin/tsc --noEmit"
   },
   "eslintConfig": {
     "extends": "react-app"
