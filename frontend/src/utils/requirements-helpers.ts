@@ -30,7 +30,7 @@ const flattenIOrCourseMajorGroup = (
   reqGroup: IMajorRequirementGroup
 ): IMajorRequirementGroup => {
   var result: Requirement[] = [];
-  if (reqGroup.type == "OR") {
+  if (reqGroup.type == "OR" || reqGroup.type == "AND") {
     result = Array.from(flattenIOrCourseRequirement(reqGroup.requirements));
     reqGroup.requirements = result;
     return reqGroup;
@@ -39,37 +39,15 @@ const flattenIOrCourseMajorGroup = (
   }
 };
 
+// flatten each requirement so that there are no nested OR blocks
 export const flattenIOrCourseRequirement = (
   requirements: Requirement[]
 ): Set<Requirement> =>
   requirements.reduce((acc: Set<Requirement>, req: Requirement) => {
     if (req.type == "OR") {
-      getCoursesInRequirement(req).forEach(acc.add, acc);
+      flattenIOrCourseRequirement(req.courses).forEach(acc.add, acc);
     } else {
       acc.add(req);
     }
     return acc;
   }, new Set<IRequiredCourse>());
-
-/**
- * Accumulate a Set of all unique courses within a given Requirement.
- * NOTE: This currently does not work for ICourseRanges.
- *
- * @param req the Requirement to retrieve the courses of
- */
-const getCoursesInRequirement = (req: Requirement): Set<Requirement> => {
-  switch (req.type) {
-    case "CREDITS":
-    case "AND":
-    case "OR": {
-      return flattenIOrCourseRequirement(req.courses);
-    }
-    case "RANGE": {
-      // TODO: Implement a solution for accumulating range courses as well.
-      return new Set();
-    }
-    case "COURSE": {
-      return new Set([req]);
-    }
-  }
-};
