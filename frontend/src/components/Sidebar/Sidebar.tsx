@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { findMajorFromName } from "../../utils/plan-helpers";
 import { ScrollWrapper } from "../../Onboarding/GenericOnboarding";
 import { NORTHEASTERN_RED } from "../../constants";
-import { flattenIOrCourseMap } from "../../utils/requirements-helpers";
+import { flattenIOrCourseMap } from "../../utils/flattenRequirements";
 
 const Container = styled.div`
   display: flex;

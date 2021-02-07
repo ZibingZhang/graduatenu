@@ -3,7 +3,12 @@ import {
   IRequiredCourse,
   Requirement,
 } from "../../../common/types";
-// remain to sidebar helper
+
+/**
+ * For every IMajorRequirementGroup, if it contains nested OR Requirements,
+ * modify the IMajorRequirementGroup so that it is flattened
+ * @param reqGroupMap the requirement group map that needs to flattened
+ */
 export const flattenIOrCourseMap = (
   reqGroupMap: Record<string, IMajorRequirementGroup>
 ): Record<string, IMajorRequirementGroup> => {
@@ -24,8 +29,10 @@ export const flattenIOrCourseMap = (
   return reqGroupMap;
 };
 
-// flatten an "OR" IMajorRequirementGroup so that requirements field contains list of
-// IRequiredCourse
+/**
+ * flatten an "OR" or "AND" IMajorRequirementGroup to remove nested ORs
+ * @param reqGroup The IMajorRequirementGroup to be modified and flattened
+ */
 const flattenIOrCourseMajorGroup = (
   reqGroup: IMajorRequirementGroup
 ): IMajorRequirementGroup => {
@@ -39,11 +46,15 @@ const flattenIOrCourseMajorGroup = (
   }
 };
 
-// flatten each requirement so that there are no nested OR blocks
-export const flattenIOrCourseRequirement = (
+/**
+ * flatten each requirement so that there are no nested OR blocks
+ * @param requirements A list of requirements to be flattend if the requirment is type OR
+ */
+const flattenIOrCourseRequirement = (
   requirements: Requirement[]
 ): Set<Requirement> =>
   requirements.reduce((acc: Set<Requirement>, req: Requirement) => {
+    // only flatten if it is OR, else keep the same
     if (req.type == "OR") {
       flattenIOrCourseRequirement(req.courses).forEach(acc.add, acc);
     } else {
