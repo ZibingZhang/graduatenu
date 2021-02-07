@@ -14,12 +14,12 @@ import {
   getActivePlanMajorFromState,
   getActivePlanScheduleFromState,
   safelyGetTransferCoursesFromState,
-  getTakenCreditsFromState,
 } from "../../state";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { findMajorFromName } from "../../utils/plan-helpers";
 import { ScrollWrapper } from "../../Onboarding/GenericOnboarding";
 import { NORTHEASTERN_RED } from "../../constants";
+import { flattenIOrCourseMap } from "../../utils/requirements-helpers";
 
 const Container = styled.div`
   display: flex;
@@ -80,6 +80,7 @@ const MajorSidebarComponent: React.FC<MajorSidebarProps> = ({
       )
     : completedCourses;
 
+  const groupMap = flattenIOrCourseMap(major.requirementGroupMap);
   return (
     <Container>
       <ScrollWrapper>
@@ -98,7 +99,7 @@ const MajorSidebarComponent: React.FC<MajorSidebarProps> = ({
             <RequirementSection
               title={!!req ? req : "Additional Requirements"}
               // TODO: this is a temporary solution for major scraper bug
-              contents={major.requirementGroupMap[req]}
+              contents={groupMap[req]}
               warning={warnings.find(w => w.requirementGroup === req)}
               key={index + major.name}
               completedCourses={completedCourseStrings}
